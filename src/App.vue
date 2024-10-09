@@ -2,6 +2,9 @@
 import {onBeforeMount, ref, watch} from 'vue';
 import CreateFile from "./components/CreateFile.vue";
 import FilesList from "./components/FilesList.vue";
+import ClassificationMatrix from "./components/ClassificationMatrix.vue";
+import RecallPrecisionPlot from "./components/RecallPrecisionPlot.vue";
+
 const activeKey = ref<string>('1');
 
 onBeforeMount(() => {
@@ -28,6 +31,12 @@ watch(() => activeKey.value, () => {
       </a-tab-pane>
       <a-tab-pane key="2" tab="Files list">
         <FilesList />
+      </a-tab-pane>
+      <a-tab-pane key="3" tab="Classification Matrix">
+        <ClassificationMatrix />
+      </a-tab-pane>
+      <a-tab-pane key="4" tab="Recall and Precision Plot">
+        <RecallPrecisionPlot />
       </a-tab-pane>
     </a-tabs>
   </div>
