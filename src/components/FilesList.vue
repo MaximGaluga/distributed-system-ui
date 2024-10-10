@@ -1,5 +1,17 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import {ref} from "vue";
+import axios from 'axios';
+import {URL} from "../api/url.ts";
+
+const getFileList = async () => {
+  try {
+    const response = await axios.get(URL + 'document/all-titles');
+  } catch (error) {
+
+  }
+}
+
+getFileList();
 
 const list = ref([
     { title: 'Title', content: 'Content' },

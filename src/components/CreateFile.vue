@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {computed, ref} from 'vue';
 import {message} from "ant-design-vue";
+import {URL} from "../api/url.ts";
+import axios from "axios";
 
 const title = ref<string>('');
 const content = ref<string>('');
@@ -8,12 +10,27 @@ const isFileLoading = ref<boolean>(false);
 
 const buttonText = computed(() => isFileLoading.value ? 'Uploading...' : 'Create file');
 
-const createFile = () => {
+const createFile = async () => {
   isFileLoading.value = true;
-  setTimeout(() => {
-    isFileLoading.value = false
+
+  const bodyParams = {
+    title: title.value,
+    content: content.value
+  };
+
+  title.value = '';
+  content.value = '';
+
+  try {
+    await axios.post(URL + 'document/create', bodyParams);
     message.success('Successful uploaded');
-  }, 3000);
+  } catch (error) {
+    title.value = bodyParams.title;
+    content.value = bodyParams.content;
+    message.error('Failed to upload');
+  } finally {
+    isFileLoading.value = false;
+  }
 }
 </script>
 
