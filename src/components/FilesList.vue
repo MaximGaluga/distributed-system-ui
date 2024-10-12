@@ -1,10 +1,18 @@
 <script setup lang="ts">
+import {message} from "ant-design-vue";
 import {computed, ref, watch} from "vue";
 import axios from 'axios';
 import {URL} from "../api/url.ts";
 import {NGROK_HEADER} from "../api/ngrokHeader.ts";
 
+// The default data for testing UI without server
+const list = ref([
+  {title: 'Title', content: 'Content'},
+  {title: 'Title', content: 'Content'},
+]);
+
 const getFileList = async () => {
+  list.value = [];
   try {
     const res = await axios.get(URL + 'document/all-titles', NGROK_HEADER);
 
@@ -21,27 +29,26 @@ const getFileList = async () => {
 
   } catch (err) {
     console.error(err)
-    list.value = [];
   }
 }
-
-getFileList();
-
-const list = ref([
-  {title: 'Title', content: 'Content'},
-  {title: 'Title', content: 'Content'},
-]);
 
 const searchQuery = ref('');
 const searchList = ref<string[]>([]);
 const search = async () => {
   try {
     const { data } = await axios.post(URL + 'search/find-by-words', { search_words: [ ...searchQuery.value.split(' ') ] });
-    Object.keys(data).forEach((wordKey) => {
-      Object.keys(data[wordKey]).forEach((titleKey) => {
-        searchList.value.push(titleKey);
-      })
-    })
+
+    const keys = Object.keys(data);
+
+    if (keys.length > 0) {
+      keys.forEach((wordKey) => {
+        Object.keys(data[wordKey]).forEach((titleKey) => {
+          searchList.value.push(titleKey);
+        })
+      });
+    } else {
+      message.error('Data was not found');
+    }
   } catch (e) {}
 }
 
@@ -56,7 +63,9 @@ const listToShow = computed<typeof list.value>(() => {
   } else {
     return list.value;
   }
-})
+});
+
+getFileList();
 </script>
 
 <template>
