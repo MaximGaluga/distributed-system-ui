@@ -28,6 +28,7 @@ const createFile = async () => {
     title.value = bodyParams.title;
     content.value = bodyParams.content;
     message.error('Failed to upload');
+    console.error(error);
   } finally {
     isFileLoading.value = false;
   }
