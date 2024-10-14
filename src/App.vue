@@ -23,7 +23,7 @@ watch(() => activeKey.value, () => {
         v-model:activeKey="activeKey"
         size="large"
         :tab-bar-gutter="25"
-        :tab-bar-style="{marginBottom: '150px', paddingLeft: '50px', marginTop: '15px'}"
+        :tab-bar-style="{marginBottom: '150px', paddingLeft: '50px', paddingRight: '50px', marginTop: '15px'}"
         type="card"
     >
       <a-tab-pane key="1" tab="Create file">
@@ -38,6 +38,12 @@ watch(() => activeKey.value, () => {
       <a-tab-pane key="4" tab="Recall and Precision Plot">
         <RecallPrecisionPlot />
       </a-tab-pane>
+      <template #rightExtra>
+        <a-tooltip placement="bottomRight" :overlayInnerStyle="{textAlign: 'center'}">
+          <template #title>Click to translate the selected text on the page</template>
+          <a-button>Translate</a-button>
+        </a-tooltip>
+      </template>
     </a-tabs>
   </div>
 </template>
