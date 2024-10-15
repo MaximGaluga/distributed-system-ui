@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import {onBeforeMount, ref, watch} from 'vue';
+import {message, notification} from "ant-design-vue";
+import {computed, onBeforeMount, ref, watch} from 'vue';
+import {translationRequest} from "./api/translationRequest.ts";
 import CreateFile from "./components/CreateFile.vue";
 import FilesList from "./components/FilesList.vue";
 import ClassificationMatrix from "./components/ClassificationMatrix.vue";
@@ -15,6 +17,33 @@ watch(() => activeKey.value, () => {
   localStorage.setItem('activeTab', activeKey.value);
 });
 
+const isTranslationState = ref<boolean>(false);
+async function translate() {
+  isTranslationState.value = true;
+  const selection = window.getSelection()?.toString();
+
+  if (selection) {
+    try {
+      const translatedText = await translationRequest(selection);
+      notification.info({
+        message: 'Translated text',
+        description: translatedText,
+        placement: 'top'
+      });
+    } catch (error) {
+      message.error('Something went wrong');
+      console.error(error);
+    }
+  } else {
+    message.warning('Text is not selected');
+  }
+
+  isTranslationState.value = false;
+}
+
+const translationText = computed(() => {
+  return isTranslationState.value ? 'Translation...' : 'Translate';
+})
 </script>
 
 <template>
@@ -41,7 +70,12 @@ watch(() => activeKey.value, () => {
       <template #rightExtra>
         <a-tooltip placement="bottomRight" :overlayInnerStyle="{textAlign: 'center'}">
           <template #title>Click to translate the selected text on the page</template>
-          <a-button>Translate</a-button>
+          <a-button
+              @click="translate"
+              :loading="isTranslationState"
+              :disabled="isTranslationState"
+          >
+            {{ translationText }}</a-button>
         </a-tooltip>
       </template>
     </a-tabs>

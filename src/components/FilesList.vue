@@ -49,7 +49,10 @@ const search = async () => {
     } else {
       message.error('Data was not found');
     }
-  } catch (e) {}
+  } catch (e) {
+    message.error('Something went wrong');
+    console.error(e);
+  }
 }
 
 watch(searchQuery, (newVal) => {
