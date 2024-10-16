@@ -69,7 +69,7 @@ const translationText = computed(() => {
       </a-tab-pane>
       <template #rightExtra>
         <a-tooltip placement="bottomRight" :overlayInnerStyle="{textAlign: 'center'}">
-          <template #title>Click to translate the selected text on the page</template>
+          <template #title>Click to translate (eng -> ru) the selected text on the page</template>
           <a-button
               @click="translate"
               :loading="isTranslationState"
